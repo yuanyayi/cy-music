@@ -1,4 +1,7 @@
 let base_url = 'http://api.jirengu.com/fm/'
+if(location && location.protocol=='https:'){
+  let base_url = 'https://jirenguapi.applinzi.com/fm'
+}
 
 function getChannels() {
   return new Promise(function(resolve, reject) {
