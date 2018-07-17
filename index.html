@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="static/js/jquery-3.3.1.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crystal's Music</title>
+  <link href="static/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/player2.css">
+</head>
+
+<body>
+  <div id="musicBox">
+    <div class="bgImg"></div>
+    <main>
+      <!--    播放器    -->
+      <section class="s1">
+        <audio hidden>
+          <source>
+        </audio>
+        <div class="frame songImage"></div>
+        <div class="controller">
+          <i class="fa fa-heart heart"></i>
+          <i class="fa fa-play play"></i>
+          <i class="fa fa-pause pause"></i>
+          <i class="fa fa-step-forward next"></i>
+        </div>
+        <div class="volumeBox"></div>
+      </section>
+      <section class="s2">
+        <p><span class="tag">90后</span></p>
+        <h1 class="song"></h1>
+        <p class="info">
+          <span><i class="fa fa-headphones" aria-hidden="true"></i>3333</span>
+          <span><i class="fa fa-heart" aria-hidden="true"></i>128</span>
+          <span><i class="fa fa-thumbs-up" aria-hidden="true"></i>20</span>
+        </p>
+        <p class="progressBox">
+          <span class="current">--:--</span>
+        </p>
+        <h3 class="singer"></h3>
+        <p class="details lrc">Hello World！</p>
+      </section>
+    </main>
+    <aside>
+      <!--   轮播图-目录     -->
+      <div class="silde" id="carousel">
+        <span class="fa fa-chevron-left left"></span>
+        <span class="fa fa-chevron-right right"></span>
+        <div class="screen">
+          <ul class="group channelList">
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>
+</body>
+<script src="static/js/cyPlayer.js"></script>
+<script src="static/js/api.js"></script>
+<script>
+let app = {}
+$(function() {
+  resizeFrame();
+  window.addEventListener('resize', resizeFrame);
+
+  function resizeFrame() {
+    $('.frame').each(function() {
+      let el = $(this);
+      el.find('img').length > 0 ? '' : el.append(`<img src="${el.data('src') || ''}"/>`);
+    })
+  }
+
+  function showChannels() {
+    let target = $('.channelList')
+    getChannels().then(list => {
+      list.forEach((channel) => {
+        target.append(`<li class="item" data-channel_id="${channel.channel_id}">
+      <div class="frame">
+        <img src="${channel.cover_middle}">
+      </div>
+      <p>${channel.name}</p>
+    </li>`)
+      })
+    })
+    $('.channelList').on('click', '.item', function(){
+      switchChannel($(this).attr('data-channel_id'))
+    })
+  }
+
+  showChannels()
+  getSong($('.channelList li').eq(0).attr('data-channel_id')).then((list) => {
+    app = new cyPlayer(document.getElementById('musicBox'), list)
+  })
+})
+
+function switchChannel(channel_id) {
+  getSong(channel_id).then((list) => {
+    app.changeSongsList(list)
+  })
+}
+</script>
+
+</html>

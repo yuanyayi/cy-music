@@ -1,0 +1,250 @@
+@testImage: url('http://pic1.win4000.com/wallpaper/f/5261fa0fc4d76.jpg');
+
+* {
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+.frame{
+  overflow: hidden;
+  position: relative;
+  img {
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+.cf_after {
+  content: "";
+  height: 0;
+  display: block;
+  visibility: hidden;
+  clear: both;
+}
+/* MAIN */
+#musicBox {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 1px;
+  overflow: hidden;
+  .bgImg {
+    display: block;
+    position: fixed;
+    z-index: -1;
+    top: -10px;
+    left: -10px;
+    bottom: -10px;
+    right: -10px;
+    opacity: .8;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-image: @testImage;
+    filter: blur(5px);
+  }
+  /*  主界面  */
+  main {
+    margin: auto;
+    color: #fff;
+    display: flex;
+    z-index: 1;
+    .frame {
+      background: #e5e5e5;
+      width: 35vh;
+      height: 35vh;
+    }
+    .controller {
+      width: 100%;
+      height: 80px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      opacity: .7;
+      font-size: 2rem;
+      i {
+        flex: 1;
+        text-align: center;
+        &.fa-heart.like {
+          color: red;
+        }
+        &.pause {
+          display: none;
+        }
+      }
+    }
+    .tag {
+      background: blue;
+      font-size: .9em;
+      color: #fff;
+      padding: 3px 5px;
+      border-radius: 4px;
+    }
+    .info {
+      display: flex;
+      padding: 2rem 0;
+      &>*{
+        flex: 1;
+        text-align: center;
+        i {
+          margin-right: 10px;
+        }
+      }
+    }
+    .progressBox {
+      padding: 1rem 0;
+    }
+    .singer {
+      margin: .5rem auto;
+    }
+    .details {
+      color: rgba(255,255,255,.5);
+    }
+  }
+}
+/* 进度条 */
+.progressBox {
+  display: flex;
+  align-items: center;
+  .progress {
+    @height: 5px;
+    flex: 1;
+    height: @height;
+    position: relative;
+    background: rgba(255,255,255,.5);
+    border-radius: @height;
+    overflow: hidden;
+    .bar {
+      display: block;
+      height: 100%;
+      width: 50%;
+      position: absolute;
+      top: 0;
+      leftL: 0;
+      background: #fff;
+    }
+  }
+  .current {
+    width: 3em;
+    margin-left: 1em;
+    order: 9;
+  }
+}
+
+
+// 移动端小屏
+@media screen and (max-width: 680px) {
+  #musicBox {
+    main {
+      margin: 10px 15px 25px;
+      flex-wrap: wrap;
+      &>section {
+        flex: 0 0 auto !important;
+      }
+      .frame {
+        width: 45vh;
+        height: 45vh;
+      }
+      .s1 {
+        margin: auto;
+      }
+      .s2 {
+        width: 100%;
+        margin-left: 0;
+      }
+      .song {
+        margin: 1rem auto;
+      }
+    }
+    .silder {
+      display: none;
+    }
+  }
+}
+/* PC */
+@media screen and (min-width: 681px) {
+  #musicBox {
+    main {
+      margin-top: 10%;
+      width: 70%;
+      overflow-y: scroll;
+      .s2 {
+        margin-left: 2rem;
+        flex: 1;
+      }
+      .song {
+        margin: 1rem auto 3rem;
+      }
+    }
+  }
+  /*  轮播图  */
+  aside {
+    background: rgba(255,255,255,.3);
+    position: absolute;
+    bottom: 0;
+    height: 23%;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+  .silde {
+    color: #fff;
+    @height: 180px;
+    line-height: @height;
+    .screen {
+      height: @height;
+      line-height: @height;
+      width: 80%;
+      margin: auto;
+      overflow: hidden;
+      position: relative;
+    }
+    ul, li {
+      list-style: none;
+    }
+    .left, .right {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2em;
+      cursor: pointer;
+      z-index: 3;
+    }
+    .left {
+      left: 2em;
+    }
+    .right {
+      right: 2em;
+    }
+    .group {
+      height: 100%;
+      padding: 15px 0;
+      width: 10000px;
+      &:after {
+        .cf_after;
+      }
+      li {
+        width: 120px;
+        height: 160px;
+        margin: 0 20px;
+        float: left;
+        .frame {
+          width: 100%;
+          height: 120px;
+          margin-bottom: .3em;
+        }
+        text-align: center;
+        line-height: 1.4em;
+        p {
+          
+        }
+      }
+    }
+  }
+}
