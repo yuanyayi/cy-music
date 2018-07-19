@@ -1,6 +1,6 @@
 let base_url = 'http://api.jirengu.com/fm/'
 if(location && location.protocol=='https:'){
-  let base_url = 'https://jirenguapi.applinzi.com/fm'
+  base_url = 'https://jirenguapi.applinzi.com/fm'
 }
 
 function getChannels() {
@@ -35,3 +35,24 @@ function getSong(channel_id) {
     })
   })
 }
+
+function getLyric(sid){
+  return new Promise(function(resolve, reject){
+    $.ajax({
+      url: base_url + 'getLyric.php',
+      type: 'get',
+      jsonp: 'callback',
+      data: {
+        sid: sid
+      },
+      success: (data)=>{
+        resolve(data.error)
+      },
+      error: (errormsg)=>{
+        reject(errormsg)
+      }
+    })
+  })
+}
+
+getLyric('758918')
