@@ -50,6 +50,17 @@ body {
   background-image: url('http://pic1.win4000.com/wallpaper/f/5261fa0fc4d76.jpg');
   filter: blur(5px);
 }
+#musicBox .bgImg:after {
+  content: '';
+  display: block;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
 #musicBox main {
   margin: auto;
   color: #fff;
@@ -170,6 +181,7 @@ body {
   #musicBox main .s2 {
     margin-left: 2rem;
     flex: 1;
+    width: 10%;
   }
   #musicBox main .song {
     margin: 1rem auto 3rem;
@@ -216,6 +228,7 @@ body {
     right: 2em;
   }
   .silde .group {
+    position: absolute;
     height: 100%;
     padding: 15px 0;
     width: 10000px;

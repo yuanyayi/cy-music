@@ -73,6 +73,7 @@ $(function() {
 
   function showChannels() {
     let target = $('.channelList')
+    let margin = 20;
     getChannels().then(list => {
       list.forEach((channel) => {
         target.append(`<li class="item" data-channel_id="${channel.channel_id}">
@@ -82,8 +83,21 @@ $(function() {
       <p>${channel.name}</p>
     </li>`)
       })
+      $('.channelList').width(list.length * (120 + margin * 2))
+
+      let group = $('#carousel .group')
+      let screenWidth = $('#carousel .screen').width()
+      let itemWidth = group.find('li').width() + 2 * margin
+      $('#carousel .right').on('click', (ev) => {
+        let dis = group.position().left - itemWidth <= -group.width() + screenWidth ? -group.width() + screenWidth : group.position().left - itemWidth
+        group.stop(false, true).animate({ left: dis })
+      })
+      $('#carousel .left').on('click', (ev) => {
+        let dis = group.position().left + itemWidth >= 0 ? 0 : group.position().left + itemWidth
+        group.stop(false, true).animate({ left: dis })
+      })
     })
-    $('.channelList').on('click', '.item', function(){
+    $('.channelList').on('click', '.item', function() {
       switchChannel($(this).attr('data-channel_id'))
     })
   }
@@ -92,6 +106,7 @@ $(function() {
   getSong($('.channelList li').eq(0).attr('data-channel_id')).then((list) => {
     app = new cyPlayer(document.getElementById('musicBox'), list)
   })
+
 })
 
 function switchChannel(channel_id) {

@@ -48,6 +48,17 @@ html, body {
     background-size: cover;
     background-image: @testImage;
     filter: blur(5px);
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      margin: auto;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,.3);
+    }
   }
   /*  主界面  */
   main {
@@ -177,6 +188,7 @@ html, body {
       .s2 {
         margin-left: 2rem;
         flex: 1;
+        width: 10%;
       }
       .song {
         margin: 1rem auto 3rem;
@@ -223,6 +235,7 @@ html, body {
       right: 2em;
     }
     .group {
+      position: absolute;
       height: 100%;
       padding: 15px 0;
       width: 10000px;
