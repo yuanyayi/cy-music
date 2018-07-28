@@ -276,6 +276,7 @@ function Progress(obj, ...opts) {
   }
   if (!obj || obj.length === 0) {
     console.error('试图建立一个不存在的进度条。')
+    return
   }
   // 初始化
   this.init = function() {
