@@ -1,4 +1,4 @@
-function cyPlayer(domEl, userPlayerList) {
+function cyPlayer(domEl, userPlayerList, option) {
   let $el = $(domEl),
     _this = this,
     // 设置实体参数
@@ -162,6 +162,7 @@ function cyPlayer(domEl, userPlayerList) {
     _next()
     _play()
   }
+  this.onChangeSong = option.onChangeSong || function(song){console.log(song)}
   // 切换歌曲
   _changeSong = (i) => {
     if (i || i === 0) { indexNow = i }
@@ -178,6 +179,7 @@ function cyPlayer(domEl, userPlayerList) {
     // audio
     $(audio).find('source').attr('src', '' + song.url)
     audio.load()
+    this.onChangeSong(song)
   }
   // 歌名切歌
   playList.on('click', 'li', (e) => {

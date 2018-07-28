@@ -19,7 +19,9 @@
         <audio hidden>
           <source>
         </audio>
-        <div class="frame songImage"></div>
+        <div class="frame songImage">
+          <img src="" alt="">
+        </div>
         <div class="controller">
           <i class="fa fa-heart heart"></i>
           <i class="fa fa-play play"></i>
@@ -59,58 +61,68 @@
 <script src="static/js/cyPlayer.js"></script>
 <script src="static/js/api.js"></script>
 <script>
+// 调试用
 let app = {}
+const LIST_lENGTH = 12 // 播放列表最大数量
+
 $(function() {
-  resizeFrame();
-  window.addEventListener('resize', resizeFrame);
+  app = new cyPlayer(document.getElementById('musicBox'), [], {
+    onChangeSong: function(song) {
+      getLyric(song.sid).then((song) => { console.log(song.lyric) })
+    }
+  })
+  showChannels().then(()=>{
+    console.log($('.channelList li').eq(0).attr('data-channel_id'));
+    switchChannel($('.channelList li').eq(0).attr('data-channel_id'))
+  })
+})
 
-  function resizeFrame() {
-    $('.frame').each(function() {
-      let el = $(this);
-      el.find('img').length > 0 ? '' : el.append(`<img src="${el.data('src') || ''}"/>`);
-    })
-  }
-
-  function showChannels() {
-    let target = $('.channelList')
-    let margin = 20;
-    getChannels().then(list => {
-      list.forEach((channel) => {
-        target.append(`<li class="item" data-channel_id="${channel.channel_id}">
+// 显示频道：
+function showChannels() {
+  let target = $('.channelList')
+  let margin = 20;
+  // API
+  return getChannels().then(list => {
+    list.forEach((channel) => {
+      target.append(`<li class="item" data-channel_id="${channel.channel_id}">
       <div class="frame">
         <img src="${channel.cover_middle}">
       </div>
       <p>${channel.name}</p>
     </li>`)
-      })
-      $('.channelList').width(list.length * (120 + margin * 2))
-
-      let group = $('#carousel .group')
-      let screenWidth = $('#carousel .screen').width()
-      let itemWidth = group.find('li').width() + 2 * margin
-      $('#carousel .right').on('click', (ev) => {
-        let dis = group.position().left - itemWidth <= -group.width() + screenWidth ? -group.width() + screenWidth : group.position().left - itemWidth
-        group.stop(false, true).animate({ left: dis })
-      })
-      $('#carousel .left').on('click', (ev) => {
-        let dis = group.position().left + itemWidth >= 0 ? 0 : group.position().left + itemWidth
-        group.stop(false, true).animate({ left: dis })
-      })
     })
-    $('.channelList').on('click', '.item', function() {
-      switchChannel($(this).attr('data-channel_id'))
-    })
-  }
+    $('.channelList').width(list.length * (120 + margin * 2))
 
-  showChannels()
-  getSong($('.channelList li').eq(0).attr('data-channel_id')).then((list) => {
-    app = new cyPlayer(document.getElementById('musicBox'), list)
+    let group = $('#carousel .group')
+    let screenWidth = $('#carousel .screen').width()
+    let itemWidth = group.find('li').width() + 2 * margin
+    $('#carousel .right').on('click', (ev) => {
+      let dis = group.position().left - itemWidth <= -group.width() + screenWidth ? -group.width() + screenWidth : group.position().left - itemWidth
+      group.stop(false, true).animate({ left: dis })
+    })
+    $('#carousel .left').on('click', (ev) => {
+      let dis = group.position().left + itemWidth >= 0 ? 0 : group.position().left + itemWidth
+      group.stop(false, true).animate({ left: dis })
+    })
   })
+  $('.channelList').on('click', '.item', function() {
+    switchChannel($(this).attr('data-channel_id'))
+  })
+}
 
-})
-
+// 转换频道
 function switchChannel(channel_id) {
-  getSong(channel_id).then((list) => {
+  let list = []
+  let promises = []
+  for (let i = 0; i < LIST_lENGTH; i++) {
+    promises.push(
+      getSong(channel_id).then((newsongs) => {
+        list = list.concat(newsongs)
+      })
+    )
+  }
+  Promise.all(promises).then(() => {
+    console.log(list)
     app.changeSongsList(list)
   })
 }
