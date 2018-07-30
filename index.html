@@ -62,16 +62,23 @@
 <script src="static/js/api.js"></script>
 <script>
 // 调试用
+
 let app = {}
 const LIST_lENGTH = 12 // 播放列表最大数量
 
 $(function() {
   app = new cyPlayer(document.getElementById('musicBox'), [], {
     onChangeSong: function(song) {
-      getLyric(song.sid).then((song) => { console.log(song.lyric) })
+      if (!!song.lyric || song.lyric != '') {
+        getLyric(song.sid).then((songinfo) => {
+          song.lyric = songinfo.lyric
+          console.log(songinfo.lyric)
+        })
+      }
     }
   })
-  showChannels().then(()=>{
+
+  showChannels().then(() => {
     console.log($('.channelList li').eq(0).attr('data-channel_id'));
     switchChannel($('.channelList li').eq(0).attr('data-channel_id'))
   })
@@ -81,6 +88,9 @@ $(function() {
 function showChannels() {
   let target = $('.channelList')
   let margin = 20;
+  $('.channelList').on('click', '.item', function() {
+    switchChannel($(this).attr('data-channel_id'))
+  })
   // API
   return getChannels().then(list => {
     list.forEach((channel) => {
@@ -104,9 +114,6 @@ function showChannels() {
       let dis = group.position().left + itemWidth >= 0 ? 0 : group.position().left + itemWidth
       group.stop(false, true).animate({ left: dis })
     })
-  })
-  $('.channelList').on('click', '.item', function() {
-    switchChannel($(this).attr('data-channel_id'))
   })
 }
 

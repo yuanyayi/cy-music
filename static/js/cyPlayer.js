@@ -258,8 +258,10 @@ function cyPlayer(domEl, userPlayerList, option) {
   }
 
   function formatTime(seconds) {
-    return Math.floor(seconds / 60) + ':' + ((seconds % 60) >= 10 ? '' : '0') + Math.round(seconds % 60)
+    let s = Math.round(seconds % 60)
+    return Math.floor(seconds / 60) + ':' + (s >= 10 ? '' : '0') + s
   }
+
   return this
 }
 
